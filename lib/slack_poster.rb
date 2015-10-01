@@ -17,16 +17,19 @@ class SlackPoster
     @responselink = 'The previous gif was ' + @query + 'd, ' + 'total votes: ' + @gif.votes.to_s
     post
   end
+  
+  def post_body
+    { 
+      payload: { 
+                  username: @username,
+                  channel: "##{@channel}",
+                  text: @responselink
+      }.to_json 
+    }
+  end
 
   def post
-    HTTParty.post(@team.webhook,
-      body: {
-        payload: {
-          username: @username,
-          channel: "##{@channel}",
-          text: @responselink
-        }.to_json
-      }
-     )
+    HTTParty.post(@team.webhook, body: post_body)
   end
+
 end
